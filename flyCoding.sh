@@ -25,6 +25,13 @@ showAllFiles() {
 	return 0
 }
 
+# Remove Xcode derived data folder.
+cleanXcodeDerivedFolder() {
+	xcodeDerivedFolderPath="`echo ~`/Library/Developer/Xcode/DerivedData"	
+	rm -r $xcodeDerivedFolderPath
+	osascript -e 'display notification "Clean Xcode derived data completion." with title "FlyCoding-BitBar"'
+}
+
 ##### Execute script ######
 if test $# -ge 1; then	
 	method=$1
@@ -46,8 +53,10 @@ path=${path//' '/'\ '}
 echo FlyCoding-BitBar
 echo ---
 echo Finder
-echo '-- Display all files ?'
+echo -- Display all files ?
 echo "---- ✅ YES | bash="$path" param1=showAllFiles param2=1 terminal=false"
 echo "---- ❌ NO | bash="$path" param1=showAllFiles param2=0 terminal=false"
+echo "-- Clean Xcode derived folder | bash="$path" param1=cleanXcodeDerivedFolder terminal=false"
+
 
 	
