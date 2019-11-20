@@ -12,6 +12,8 @@
 
 ##### About Finder #####
 
+# Display all hidden files.
+# - param1: Either 1 or 0, 1 display, 0 hide.
 showAllFiles() {
 	show=YES
 	if [ $1 -eq 1 ]; then
@@ -20,19 +22,20 @@ showAllFiles() {
 		show=NO
 	fi
 	defaults write com.apple.finder AppleShowAllFiles $show; killall Finder /System/Library/CoreServices/Finder.app
-	
 	return 0
 }
 
 ##### Execute script ######
-if test $# -ge 1; then
-	if [[ $1 == showAllFiles ]]; then
-		shift
-		showAllFiles $*
-	fi
-	
+if test $# -ge 1; then	
+	method=$1
+	shift
+	$method $*
+#	if [[ $1 == showAllFiles ]]; then
+#		shift
+#		showAllFiles $*
+#	fi	
 	# Default return succes code.
-	return 0	
+	return 0
 fi
 
 
@@ -40,9 +43,11 @@ fi
 path="`pwd`/$0"
 path=${path//' '/'\ '}
 
-echo FlyCoding
+echo FlyCoding-BitBar
 echo ---
 echo Finder
-echo '-- Display all files'
-echo "---- YES | bash="$path" param1=showAllFiles param2=1"
-echo "---- NO | bash="$path" param1=showAllFiles param2=0"
+echo '-- Display all files ?'
+echo "---- ✅ YES | bash="$path" param1=showAllFiles param2=1 terminal=false"
+echo "---- ❌ NO | bash="$path" param1=showAllFiles param2=0 terminal=false"
+
+	
