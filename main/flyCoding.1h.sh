@@ -32,15 +32,44 @@ cleanXcodeDerivedFolder() {
 	osascript -e 'display notification "Clean Xcode derived data completion." with title "FlyCoding-BitBar"'
 }
 
+# Get Beijing weather.
+getBeijingWeather() {	
+	user=`echo ~`
+	path="$user/Desktop/BitBar/utils/weather.py"
+	result=`python3 $path`
+	if test ${#result} -ge 1; then
+		str=""
+		index=0
+		oldIFS=$IFS
+		IFS=,
+		
+		for item in $result;
+		do
+			if test $index -eq 0; then
+				str+="\e[1;32m $item \e[0m"
+			elif test $index -eq 1; then
+				str+="\e[1;32m $item \e[0m"
+			elif test $index -eq 2; then
+				str+="\e[1;34m $item \e[0m"
+			elif test $index -eq 3; then
+				str+="\e[1;31m $item \e[0m"
+			fi
+			let index+=1
+		done
+				
+		IFS=$oldIFS		
+		echo -e $str
+		return 0
+	fi
+	echo $result
+}
+
 ##### Execute script ######
-if test $# -ge 1; then	
+if test $# -ge 1; then
 	method=$1
 	shift
 	$method $*
-#	if [[ $1 == showAllFiles ]]; then
-#		shift
-#		showAllFiles $*
-#	fi	
+	
 	# Default return succes code.
 	return 0
 fi
@@ -50,13 +79,12 @@ fi
 path="`pwd`/$0"
 path=${path//' '/'\ '}
 
-echo FlyCoding-BitBar
+
+#echo Bit bar
+echo "🚀 `getBeijingWeather` 🚀 | font='Arial Rounded MT Bold"
 echo ---
 echo Finder
 echo -- Display all files ?
 echo "---- ✅ YES | bash="$path" param1=showAllFiles param2=1 terminal=false"
 echo "---- ❌ NO | bash="$path" param1=showAllFiles param2=0 terminal=false"
 echo "-- Clean Xcode derived folder | bash="$path" param1=cleanXcodeDerivedFolder terminal=false"
-
-
-	
